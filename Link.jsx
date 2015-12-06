@@ -7,21 +7,26 @@ Link = React.createClass({
   },
 
   presentation () {
-    GoogleApi.get(this.props.data.link, null, function (err, results) {
-      if(err) {
+    Meteor.call('getPresentationHtml', this.props.data.link, function (err, result) {
+      if(err){
         console.error(err);
-      } else {
-        console.log("this is the results from ")
+      }else {
+        console.log("we got back here with this", result);
       }
     })
   },
 
   render () {
     return (
-      <div onClick={this.presentation}>
-        <div class="thumbnail" style="background-image=url({this.prop.data.thumbnail})"></div>
-        <h1>{this.prop.data.title}</h1>
-      </div>
+      <li>
+        <div onClick={this.presentation}>
+          <img src={this.props.data.thumbnail}/>
+          <h1>{this.props.data.title}</h1>
+        </div>
+      </li>
     )
   }
 })
+
+
+// <div class="thumbnail" style={{background-image:"url('"+{this.props.data.thumbnail}+"')"}}></div>

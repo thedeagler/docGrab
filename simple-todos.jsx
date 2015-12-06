@@ -1,4 +1,5 @@
 // Define a collection to hold our tasks
+
 Presentations = new Mongo.Collection("presentations");
 
 if (Meteor.isClient) {
@@ -16,3 +17,16 @@ if (Meteor.isClient) {
     React.render(<App />, document.getElementById("render-target"));
   });
 }
+
+if (Meteor.isServer) {
+  var getSVG = Meteor.npmRequire('google-slides-downloader');
+  Meteor.methods ({
+    getPresentationHtml: function (url) {
+      getSVG.getSVGs(url).then(function (svgs){
+        console.log("what we get",svgs);
+        return svgs;
+      })
+    }
+  })
+};
+

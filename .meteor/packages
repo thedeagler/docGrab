@@ -23,3 +23,8 @@ accounts-ui
 accounts-password
 accounts-google
 percolate:google-api
+http
+meteorhacks:npm
+
+
+npm-container
