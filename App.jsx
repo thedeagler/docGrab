@@ -13,6 +13,7 @@ App = React.createClass({
     }
   },
   grabDocs() { 
+    console.log('user', Meteor.user());
     return this.getPresentationList(this,(result) => {
 
       // Get tasks from this.data.tasks
@@ -21,7 +22,8 @@ App = React.createClass({
           link: doc.embedLink.replace('preview', 'embed'),
           title: doc.title,
           thumbnail: doc.thumbnailLink,
-          gid: doc.id
+          gid: doc.id,
+          owner: doc.owners[0]
         }
       });
     });

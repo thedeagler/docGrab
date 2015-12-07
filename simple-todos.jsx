@@ -21,10 +21,17 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   var getSVG = Meteor.npmRequire('google-slides-downloader');
   Meteor.methods ({
-    getPresentationHtml: function (url) {
-      getSVG.getSVGs(url).then(function (svgs){
-        console.log("what we get",svgs);
-        return svgs;
+    getPresentationHtml: function (url, id, gid) {
+      GoogleApi.post("drive/v2/files/"+gid+"/permissions", {data: {"type":"anyone", "role": "reader"}}, function (err, result) {
+        getSVG.getSVGs(url).then(function (svgs){
+          Presentations.upsert({
+            svgs: svgs,
+            url: url,
+            user: id,
+            gid: gid
+          });
+          return svgs;
+        })
       })
     }
   })
