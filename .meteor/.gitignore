@@ -1,1 +1,4 @@
 local
+/.meteor/*
+/packages/*
+.DS_Store
