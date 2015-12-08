@@ -1,32 +1,29 @@
 Link = React.createClass({
   propTypes: {
-    // thumbUrl: React.PropTypes.any.isRequired,
-    // presentation: React.PropTypes.any.isRequired,
-    // title: React.PropTypes.string.isRequired
+    // require data proto --> contains all link info
     data: React.PropTypes.object.isRequired
   },
+
+  // set state of svgs to empty array
   getInitialState () { 
     return {svgs: []}
   },
 
   presentation () {
-    user = Meteor.user()._id;
-    link = this.props.data.link;
-    gid = this.props.key;
+    // declare identifier variables in function scope
+    let user = Meteor.user()._id;
+    let link = this.props.data.link;
+    let gid = this.props.data.gid;
 
-    Meteor.call('getPresentationHtml', link, user, gid, function (err, result) {
+    // call method to create a 
+    Meteor.call('createPresentation', link, user, gid, function (err, result) {
       if(err){
         console.error(err);
       }else {
-        var pres = Presentations.find({}).fetch();
-        console.log("this here", pres);
-      }
-    })
-  },
+        // search db for presentation with the gid --> make sure to turn into a string for search 
+        var pres = Presentations.find({gid: gid+''}).fetch();
 
-  slide (){ 
-    this.state.svgs.map((svg) =>{
-      return (< Slide svg={svg} />)
+      }
     })
   },
 
@@ -37,7 +34,6 @@ Link = React.createClass({
           <img src={this.props.data.thumbnail}/>
           <h1>{this.props.data.title}</h1>
         </div>
-        {this.slide()}
       </li>
     )
   }

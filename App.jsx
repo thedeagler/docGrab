@@ -1,35 +1,27 @@
 App = React.createClass({
- // This mixin makes the getMeteorData method work
-  mixins: [ReactMeteorData],
-
+  
   getInitialState () { 
+    // set links to an empty array
     return {links: []}
   },
 
-  // Loads items from the Tasks collection and puts them on this.data.tasks
-  getMeteorData() {
-    return {
-      presentations: Presentations.find({}).fetch()
-    }
-  },
   grabDocs() { 
-    console.log('user', Meteor.user());
+    // get presentations
     return this.getPresentationList(this,(result) => {
-
-      // Get tasks from this.data.tasks
+      // extract important data from presentation objects that we get back from google drive API
       return result.items.map((doc) => {
         return {
           link: doc.embedLink.replace('preview', 'embed'),
           title: doc.title,
           thumbnail: doc.thumbnailLink,
-          gid: doc.id,
-          owner: doc.owners[0]
+          gid: doc.id
         }
       });
     });
   },
 
   renderLinks() {
+    // iterate over links and create a new Link for each item in the array
     return this.state.links.map((link) => {
       return (
         <Link
@@ -40,13 +32,12 @@ App = React.createClass({
   },
 
   getPresentationList(react, cb) {
+    // query for all presentations that are in user's google drive
     return GoogleApi.get('drive/v2/files?q=mimeType="application/vnd.google-apps.presentation"',null, function (err, result) {
       if(err) console.error(err);
-
-      // Use react setstate instead. Look into state -> subscribe
-      console.log(result);
+      // pass the document objects to callback, getting an array of objects with specific traits
       var links = cb(result);
-      console.log('here are links', links);
+      // change state of links to this new array
       react.setState({links: links});
     });
   },
