@@ -4,26 +4,48 @@ Slides = React.createClass({
     svgs: React.PropTypes.array
   },
 
-  getInitialState () { 
+  getInitialState() {
     // set links to an empty array
     return {index: 0}
   },
 
-  increment() {
+  nextSlide() {
     var numb = this.state.index + 1;
     if(numb >= this.props.svgs.length){
       this.setState({index: 0})
     } else {
-      this.setState({index: numb});    
+      this.setState({index: numb});
     }
   },
 
-  slideMaker(){
+  prevSlide() {
+    var numb = this.state.index - 1;
+    if(numb >= this.props.svgs.length){
+      this.setState({index: 0})
+    } else {
+      this.setState({index: numb});
+    }
+  },
+
+  slideMaker() {
     console.log("making a slide");
     return {__html: this.props.svgs[this.state.index]};
   },
 
+  // DOESN't really work. Once deleted, can't be re-added
+  // closePres(e) {
+  //   console.log(e.target);
+  //   e.target.parentNode.parentNode.HTML = null;
+  // },
+
   render () {
-    return <div className="slide" onClick={this.increment} dangerouslySetInnerHTML={this.slideMaker()}></div>
+    return (
+      <div>
+        <div className="slide" onClick={this.nextSlide} dangerouslySetInnerHTML={this.slideMaker()}></div>
+        <span onClick={this.prevSlide}>prev</span>
+        <span onClick={this.nextSlide}>next</span>
+        <span onClick={this.closePres}>close</span>
+      </div>
+    )
   }
 })

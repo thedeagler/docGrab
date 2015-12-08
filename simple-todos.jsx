@@ -1,9 +1,8 @@
 // Define a collection to hold our tasks
-
 Presentations = new Mongo.Collection("presentations");
 
 if (Meteor.isClient) {
-  // set scope for google auth to include drive access 
+  // set scope for google auth to include drive access
   var scopes = ['https://www.googleapis.com/auth/drive'];
 
   Accounts.ui.config({
@@ -19,13 +18,13 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
-  // require npm package 
+  // require npm package
   Meteor.startup(function () {
     Presentations.remove({});
   })
   var getSVG = Meteor.npmRequire('google-slides-downloader');
   Meteor.methods ({
-    // method for creating a new presentation in database with svg elements  
+    // method for creating a new presentation in database with svg elements
     createPresentation: function (url, id, gid, cb) {
       // change privacy setting of the presentation to public
       GoogleApi.post("drive/v2/files/"+gid+"/permissions", {data: {"type":"anyone", "role": "reader"}}, function (err, result) {
